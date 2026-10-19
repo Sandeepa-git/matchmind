@@ -9,8 +9,8 @@ Built for *Inside the Game: Microsoft × Premier League Developer Hackathon*.
 | **Self-correction** | The FactChecker rejects unsupported claims (scorelines, minutes, hat-tricks, plus an LLM groundedness check). The Narrator rewrites from that feedback, and after 2 failures a Fallback agent builds a template recap from verified data only |
 | Live replay + momentum / xG | `api/matchmind/metrics.py`: rolling threat window over the event stream |
 | Key-moment detection | Goals, big chances (xG ≥ 0.3), momentum flips |
-| **Explainable "Why?" cards** | Tool-calling agent (`analyst.py`) on Microsoft Foundry GPT-4o. It must cite event IDs, which the UI shows as evidence |
-| Recap studio | 4 personas × 3 formats (TV script, social thread, article), GPT-4o-mini |
+| **Explainable "Why?" cards** | Tool-calling agent (`analyst.py`) on Microsoft Foundry gpt-5-mini. It must cite event IDs, which the UI shows as evidence |
+| Recap studio | 4 personas × 3 formats (TV script, social thread, article), gpt-5-mini |
 | Multilingual | Azure AI Translator (8 languages, including Sinhala, Hindi and Arabic with RTL) |
 | Ask the analyst | Grounded Q&A over 5-minute match chunks with citations (upgrade path: Azure AI Search) |
 | Cost control | Every LLM output is cached on disk (`api/cache/`), so a demo costs ~$0 after the first run |
@@ -30,7 +30,7 @@ The UI shows every handoff live. Tick **Stress test** to inject a hallucination 
        (data/)        (momentum, xG)                    team_stats, player_involvement)
                                                               │
  React (Static Web Apps) ◀── Azure Functions API ◀────────────┤
-   momentum chart, Why? cards,   /state /why /produce /ask     ├─▶ GPT-4o-mini recaps
+   momentum chart, Why? cards,   /state /why /produce /ask     ├─▶ gpt-5-mini recaps 
    recap studio, chat                                         └─▶ Azure AI Translator
 ```
 
