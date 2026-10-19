@@ -1,0 +1,8 @@
+.env
+local.settings.json
+__pycache__/
+.venv/
+node_modules/
+dist/
+api/cache/
+.python_packages/

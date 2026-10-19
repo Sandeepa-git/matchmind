@@ -1,0 +1,5 @@
+azure-functions
+openai>=1.40
+requests
+python-dotenv
+agent-framework-core>=1.22

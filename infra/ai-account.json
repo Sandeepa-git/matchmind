@@ -1,0 +1,11 @@
+{
+  "kind": "AIServices",
+  "location": "eastus2",
+  "sku": { "name": "S0" },
+  "identity": { "type": "SystemAssigned" },
+  "properties": {
+    "customSubDomainName": "matchmind-resource",
+    "publicNetworkAccess": "Enabled",
+    "allowProjectManagement": true
+  }
+}
