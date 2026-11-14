@@ -10,7 +10,10 @@ try:
 except ImportError:
     pass
 
+# Bundled cache ships with the app (pre-warmed demo outputs). On Azure the package is read-only,
+# so new entries go to MATCHMIND_CACHE_DIR (e.g. /tmp/matchmind-cache).
 CACHE_DIR = Path(__file__).resolve().parent.parent / "cache"
+WRITE_DIR = Path(os.getenv("MATCHMIND_CACHE_DIR", str(CACHE_DIR)))
 MODEL_SMART = os.getenv("MODEL_SMART", "gpt-5-mini")
 MODEL_FAST = os.getenv("MODEL_FAST", "gpt-5-mini")
 
@@ -36,13 +39,16 @@ def cached(key_parts: list, fn):
     """Cache LLM outputs on disk: saves Azure credit and makes demos instant."""
     if is_mock():
         return fn()
-    CACHE_DIR.mkdir(exist_ok=True)
     key = hashlib.sha1(json.dumps(key_parts, sort_keys=True, default=str).encode()).hexdigest()
-    path = CACHE_DIR / f"{key}.json"
-    if path.exists():
-        return json.loads(path.read_text(encoding="utf-8"))
+    for d in (CACHE_DIR, WRITE_DIR):
+        if (d / f"{key}.json").exists():
+            return json.loads((d / f"{key}.json").read_text(encoding="utf-8"))
     result = fn()
-    path.write_text(json.dumps(result, ensure_ascii=False), encoding="utf-8")
+    try:
+        WRITE_DIR.mkdir(parents=True, exist_ok=True)
+        (WRITE_DIR / f"{key}.json").write_text(json.dumps(result, ensure_ascii=False), encoding="utf-8")
+    except OSError:
+        pass  # caching is an optimisation, never a failure
     return result
 
 

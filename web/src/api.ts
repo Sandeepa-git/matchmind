@@ -16,9 +16,11 @@ export type Why = {
 export type TraceStep = { agent: string; status: "ok" | "pass" | "reject" | "warn"; detail: string; ms: number };
 export type Produced = { text: string; lang: string; verified: boolean; attempts: number; trace: TraceStep[] };
 
-const get = async <T,>(url: string): Promise<T> => (await fetch(url)).json();
+// Empty locally (Vite proxies /api); set VITE_API_BASE to the Function App URL for Azure builds.
+const BASE: string = import.meta.env.VITE_API_BASE ?? "";
+const get = async <T,>(url: string): Promise<T> => (await fetch(BASE + url)).json();
 const post = async <T,>(url: string, body: unknown): Promise<T> =>
-  (await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })).json();
+  (await fetch(BASE + url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })).json();
 
 export const api = {
   state: (minute: number) => get<State>(`/api/state?minute=${minute}`),

@@ -1,1 +1,1 @@
-{ "platform": { "apiRuntime": "python:3.11" }, "navigationFallback": { "rewrite": "/index.html" } }
+{ "navigationFallback": { "rewrite": "/index.html" } }
